@@ -7,109 +7,37 @@ LANG: C++
 #include <fstream>
 #include <string>
 #include <vector>
-
+#include <map>
 using namespace std;
 
-class giftor
-{
-	public:
-		giftor();
-		string get_name();
-		int  get_account();		
-		int get_money_flow();
-		void read_name(string name);
-		void  read_account(int account);
-		void money_flow(int mf);
-	private:
-		string name;
-		int account;
-		int moneyflow;
-};
-
-giftor::giftor():account(0), moneyflow(0) {}
-
-string giftor::get_name()
-{
-	return this->name;
-}
-
-int  giftor::get_account()
-{
-	return account;
-}
-
-void giftor::read_name(string name)
-{
-	this->name = name;
-	return;
-}
-
-void  giftor::read_account(int account)
-{
-	this->account = account;
-	return;
-}
-
-int  giftor::get_money_flow()
-{
-	return this->moneyflow;	
-}
-
-void  giftor::money_flow(int mf)
-{
-	this->moneyflow += mf;
-	return;	
-}
-
 int main() {
-	ofstream fout ("gift1.out");
-	ifstream fin ("gift1.in");
-	int i, j, k, p, NP, NG;   
-	string name;
-	int account;
-	giftor *g = new giftor();
-	vector<giftor> v_giftor;
-	fin >> NP;
-	for(i=0; i<NP; i++)
-	{
-		fin >> name;
-		(*g).read_name(name);
-		v_giftor.push_back(*g);
-	}	
-	
-	for(i=0; i<NP; i++)
-	{
-		fin >> name;
-		for(j=0; j<NP; j++)
-		{
-			if(v_giftor[j].get_name() == name)
-			{		
-				int division = 0;
-				fin >> account;
-				v_giftor[j].read_account(account);				
-				fin >> NG;
-				if(NG!=0)
-					division = v_giftor[j].get_account()/NG;
-				v_giftor[j].money_flow(0-division*NG);
-				for(k=0; k<NG; k++)
-				{
-					fin >> name;
-					for(p=0; p<NP; p++)
-					{
-						if(v_giftor[p].get_name() == name)
-						{
-							v_giftor[p].money_flow(division);
-							break;
-						}
-					}
-				}
-				break;
-			}			
+	freopen ("gift1.in", "r", stdin);
+	freopen ("gift1.out", "w", stdout);
+	vector<string> name_v;
+	map<string, int> money_amount;
+	int size, i=0, j, money_orig, money_given_number;
+	cin>>size;
+	name_v.resize(size);
+	while(i<size){
+		cin>>name_v[i];
+		money_amount[name_v[i]] = 0;
+		i++;
+	}
+	for(i=0; i<size; i++){
+		string name;
+		int money_given_each;
+		cin>>name;
+		cin>>money_orig>>money_given_number;
+		if(!money_orig || !money_given_number) continue;
+		money_given_each = money_orig/money_given_number;
+		money_amount[name] -= (money_orig - money_orig%money_given_number);
+		for(j=0; j<money_given_number; j++){
+			cin>>name;
+			money_amount[name] += money_given_each;
 		}
 	}
-	for(i=0; i<NP; i++)
-	{
-		fout << v_giftor[i].get_name() << " " << v_giftor[i].get_money_flow() << endl;
+	for(i=0; i<size; i++){
+		cout<<name_v[i]<<" "<<money_amount[name_v[i]]<<endl;
 	}
 	return 0;
 }
