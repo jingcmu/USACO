@@ -6,129 +6,29 @@ LANG: C++
 #include <iostream>
 #include <fstream>
 #include <string>
-
+#include <algorithm>
 using namespace std;
-
-int main()
-{
-	ofstream fout("beads.out");
-	ifstream fin("beads.in");
-	string S1;
-	int N, a, b, c, flag1, flag2, i, ft;
-
-	a=b=c=flag1=flag2=0;
-	
-	fin >> N;
-	fin >> S1;
-	S1= S1+S1;
-
-	for(i=0; i<N*2; i++)
-	{
-		if(S1[i] == 'b') ft = 1;
-		else if(S1[i] == 'r') ft = 2;
-		else ft = 0;
-
-		if(ft == 0)   //read a 'w'
-		{
-			if(flag2 == 0)    //a's turn
-				a++;
-			else			//b's turn
-				b++;
+ 
+int main() {
+	freopen("beads.in", "r", stdin);
+	freopen("beads.out", "w", stdout);
+	char c=0;
+	string s;
+	int N,a=0,b=0,w=0,ans=0;
+	cin>>N>>s;
+	s = s+s;
+	for (int i = 0; i < 2*N; i++) {
+		if (s[i] == 'w') b++,w++;
+		else if (s[i] == c) b++,w=0;
+		else {
+			c = s[i];
+			ans = a+b>ans?a+b:ans; 
+			a = b-w;  //a记录上一个字符串的长度
+			b = w+1; //b记录这个字符串长度
+			w = 0;
 		}
-		else
-		{
-			if(ft == 1)  //read a 'b'
-			{
-				if(flag1 == 1)
-				{
-					if(flag2 == 0)    //a's turn
-						a++;
-					else			//b's turn
-						b++;
-				}
-				else if(flag1 == 2)
-				{
-					int j = i;
-					if(c<a+b) 
-						c = a+b;
-					flag1 = ft;
-					flag2 = (flag2 + 1)%2;
-					if(flag2 == 0)    //a's turn
-					{							
-						a = 1;
-						while(S1[--j] == 'w')
-						{
-							a++;
-							b--;
-						}
-					}
-					else			//b's turn
-					{
-						b = 1;
-						while(S1[--j] == 'w')
-						{
-							b++;
-							a--;
-						}
-					}
-				}
-				else
-				{
-					flag1 = ft;
-					if(flag2 == 0)    //a's turn
-						a++;
-					else			//b's turn
-						b++;
-				}
-			}
-			else           //read a 'r'
-			{
-				if(flag1 == 2)
-				{
-					if(flag2 == 0)    //a's turn
-						a++;
-					else			//b's turn
-						b++;
-				}
-				else if(flag1 == 1)
-				{
-					int j = i;
-					if(c<a+b) 
-						c = a+b;
-					flag1 = ft;
-					flag2 = (flag2 + 1)%2;
-					if(flag2 == 0)    //a's turn
-					{	
-						a = 1;
-						while(S1[--j] == 'w')
-						{
-							a++;
-							b--;
-						}
-					}
-					else			//b's turn
-					{
-						b = 1;
-						while(S1[--j] == 'w')
-						{
-							b++;
-							a--;
-						}
-					}
-				}
-				else
-				{
-					flag1 = ft;
-					if(flag2 == 0)    //a's turn
-						a++;
-					else			//b's turn
-						b++;
-				}
-			}
-		}					
 	}
-	if(c==0||c>N)
-		c = N;
-	fout << c <<endl;
+	ans = max(ans, a+b);
+	cout<<min(ans, N)<<endl;
 	return 0;
 }

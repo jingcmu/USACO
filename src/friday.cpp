@@ -7,36 +7,29 @@ LANG: C++
 #include <fstream>
 using namespace std;
 
-int month_day[12] = {31,31,28,31,30,31,30,31,31,30,31,30};
-int month_day_leap[12] = {31,31,29,31,30,31,30,31,31,30,31,30};
+int month_day[12] = {31,28,31,30,31,30,31,31,30,31,30,31};
 int result[7] = {0};
-
-bool is_leapyear(int year) {
-	return year%100 == 0? (year%400 == 0):(year%4 == 0);
-}
-
 void calculate(int year) {
-	int *m;
-	int day = 2; //星期三
-	for(int i=0; i<year; i++){
-		m = is_leapyear(1900+i)? month_day_leap : month_day;
+	int day = 0; //星期一
+	for(int i=1900; i<1900+year; i++){
+		if(i%100 == 0? (i%400 == 0):(i%4 == 0)) month_day[1]++;
 		for(int j=0; j<12; j++) {
-			day = (day+m[j])%7;
 			result[day]++;
+			day = (day+month_day[j])%7;
 		}
+		month_day[1] = 28;
 	}
 }
 
 int main() {
 	freopen ("friday.in", "r", stdin);
 	freopen ("friday.out", "w", stdout);
-	int N, i, first_day;
-
+	int N, i;
 	cin >> N;
 	calculate(N);
 	for(i=0; i<6; i++) {
-		cout << result[(i+5)%7] << " ";
+		cout << result[i] << " ";
 	}
-	cout << result[(i+5)%7] << endl;
+	cout<<result[6]<<endl;
 	return 0;
 }
