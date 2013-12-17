@@ -9,7 +9,7 @@ LANG: C++
 #include <string>
 using namespace std;
 
-string convert(int Num, int base, string &str) {
+string convert(int Num, int base) {
 	string s = "";
 	do {
 		int residue = (Num%base);
@@ -35,8 +35,8 @@ int main() {
 	
 	for(int i=1; i<=300; i++) {
 		square = i*i;
-		str_i = convert(i, B, str_i);
-		str_square = convert(square, B, str_square);
+		str_i = convert(i, B);
+		str_square = convert(square, B);
 		if(is_pal(str_square)) {
 			cout << str_i << " " << str_square << endl;
 		}

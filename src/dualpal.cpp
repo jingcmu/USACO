@@ -7,63 +7,41 @@ LANG: C++
 #include <iostream>
 #include <fstream>
 #include <string>
-
+#include <algorithm>
 using namespace std;
-char str[100];
 
-int convert(int Num, int base)
-{
-	int i = 0, residue;
-	do
-	{
-		residue = (Num%base);
-		i++;
-		str[i] = residue+48;
-		Num -= residue;
-		Num /= base;
-	}while(Num!=0);
-	
-	return i;
+string convert(int Num, int base) {
+	string s = "";
+	do {
+		int residue = (Num%base);
+		s += residue+(residue<10?48:55);
+		Num = (Num-residue)/base;
+	} while(Num!=0);
+	reverse(s.begin(), s.end());
+	return s;
 }
 
 int main() {
-    ofstream fout ("dualpal.out");
-    ifstream fin ("dualpal.in");
-    int N, S, i, j, k, fn, len, n, equal;
-    fin >> N >> S;
-
-	fn = 0;
-	
-	for(i=S+1; i<32767; i++)
-	{
-		n = 0;
-		for(j=2; j<=10; j++)
-		{
-			len = convert(i, j);
-			k = 1;
-			equal = 1;
-			while(len>=k)
-			{
-				if(str[k++]!=str[len--])
-				{
-					equal = 0;
-					break;
-				}					
-			}
-			if(equal) n++;
+    freopen("dualpal.out", "w", stdout);
+    freopen("dualpal.in", "r", stdin);
+	string str, tmp;
+    int N, S, i, fn = 0;
+    cin >> N >> S;
+	i = S;
+	while(i++) {
+		int n = 0;
+		for(int j=2; j<=10; j++) {		//base 2 to 10
+			tmp = str = convert(i, j);	
+			reverse(tmp.begin(), tmp.end());
+			if(tmp == str) n++;
 			if(n>=2) break;
 		}
 
-		if( n >= 2 )				//condition
-		{
-			fn++;
-			fout << i << endl;
-			if(fn >= N)
-			{
-				break;
-			}
+		if( n >= 2 ) {
+			fn++;	
+			cout << i << endl;
+			if(fn >= N) break;
 		}
-	}
-    
+	}    
     return 0;
 }
