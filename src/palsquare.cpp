@@ -3,86 +3,42 @@ ID:wo__che1
 PROG: palsquare
 LANG: C++
 */
-
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include <string>
-
 using namespace std;
-char str_i[10], str_square[100];
 
-int convert(int Num, int base, char str[])
-{
-	int i = 0, residue;
-	do
-	{
-		residue = (Num%base);
-		i++;
-		if(residue<10)
-		{
-			str[i] = residue+48;
-		}
-		else
-		{
-			str[i] = residue+55;
-		}
-		Num -= residue;
-		Num /= base;
-	}while(Num!=0);
-	
-	return i;
+string convert(int Num, int base, string &str) {
+	string s = "";
+	do {
+		int residue = (Num%base);
+		s += residue+(residue<10?48:55);
+		Num = (Num-residue)/base;
+	} while(Num!=0);
+	reverse(s.begin(), s.end());
+	return s;
 }
 
-void reverse(char str[], int length)
-{
-	int i;
-	char temp;
-	for(i=1; i<=length/2; i++)
-	{
-		temp = str[i];
-		str[i] = str[length + 1 - i];
-		str[length + 1 - i] = temp;
-	}
-	return;
+bool is_pal(string &str) {
+	string temp = str;
+	reverse(str.begin(), str.end());
+	return temp == str;
 }
 
 int main() {
-    ofstream fout ("palsquare.out");
-    ifstream fin ("palsquare.in");
-	int B, i, j, k, len_i, len_square, len_square_tmp, equal;
-	long int i_square;
-	fin >> B;
+    freopen("palsquare.out", "w", stdout);
+    freopen("palsquare.in", "r", stdin);
+	int B, square;
+	string str_i, str_square;
+	cin >> B;
 	
-	for(i=1; i<=300; i++)
-	{
-		i_square = i*i;
-		len_i = convert(i, B, str_i);
-		len_square = convert(i_square, B, str_square);
-		reverse(str_i, len_i);
-		reverse(str_square, len_square);
-		j = 1;
-		equal = 1;
-		len_square_tmp = len_square;
-		while(len_square_tmp>=j)
-		{
-			if(str_square[j++]!=str_square[len_square_tmp--])
-			{
-				equal = 0;
-				break;
-			}	
-		}
-		if(equal)
-		{
-			for(k=1; k<=len_i; k++)
-			{
-				fout << str_i[k];
-			}
-			fout << " ";
-			for(k=1; k<=len_square; k++)
-			{
-				fout << str_square[k];
-			}
-			fout << endl;
+	for(int i=1; i<=300; i++) {
+		square = i*i;
+		str_i = convert(i, B, str_i);
+		str_square = convert(square, B, str_square);
+		if(is_pal(str_square)) {
+			cout << str_i << " " << str_square << endl;
 		}
 	}
 	return 0;
