@@ -33,10 +33,12 @@ int main() {
 		v_farmer.push_back(f); //把所有farmer放入vector
 	}
 	sort(v_farmer.begin(), v_farmer.end(), cmp); //对farmer进行排序
+	//贪心法 先挑便宜的买
 	for(i=0; amount < total_milk; ++i) {
 		total_price += v_farmer[i].price * v_farmer[i].amount;
 		amount += v_farmer[i].amount;
 	}
+	//超出量则减去即可
 	if(amount - total_milk > 0) {
 		total_price -= v_farmer[--i].price * (amount - total_milk);
 	}
