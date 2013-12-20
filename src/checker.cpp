@@ -6,7 +6,6 @@ LANG: C++
 #include <math.h>
 #include <iostream>
 #include <fstream>
-
 using namespace std;
 
 int row_dealing, num=0;
@@ -24,7 +23,7 @@ int diag_table[14][14] =
 {0,4,5,6,7,8,9,10,11,12,13,14,15,16},
 {0,5,6,7,8,9,10,11,12,13,14,15,16,17},
 {0,6,7,8,9,10,11,12,13,14,15,16,17,18},
-{0,7,8,9,10,11,12,13,14,15,16,17,18,19},
+{0,7,8,9,10,11,12,13,14,15,16,17,18,19}, 
 {0,8,9,10,11,12,13,14,15,16,17,18,19,20},
 {0,9,10,11,12,13,14,15,16,17,18,19,20,21},
 {0,10,11,12,13,14,15,16,17,18,19,20,21,22},
@@ -34,7 +33,7 @@ int diag_table[14][14] =
 };
 
 
-void put_checker(int len, int col, ofstream &fout)
+void put_checker(int len, int col)
 {
 	int row, i;
 	if(col == len+1) 
@@ -43,9 +42,9 @@ void put_checker(int len, int col, ofstream &fout)
 		{
 			for(i=1; i<len; i++)
 			{
-				fout<<col_c[i]<<" ";
+				cout << col_c[i] << " ";
 			}
-			fout<<col_c[len]<<endl;
+			cout << col_c[len] << endl;
 		}
 		return;
 	}
@@ -57,7 +56,7 @@ void put_checker(int len, int col, ofstream &fout)
 			diag_n[diag_table[row][col]] = diag_m[len+row-col] = row_c[row] = true;
 			col_c[col] = row;
 			//placequeen(column+1);
-			put_checker(len, col+1, fout);
+			put_checker(len, col+1);
 			//un-mark queen placed at column,row;
 			diag_n[diag_table[row][col]] = diag_m[len+row-col] = row_c[row] = false;
 		}
@@ -66,12 +65,11 @@ void put_checker(int len, int col, ofstream &fout)
 }
 
 int main() {
-    ofstream fout("checker.out");
-    ifstream fin("checker.in");
-	int i, j, len;
-	short canput;
-	fin>>len;    
-	put_checker(len, 1, fout);	
-	fout<<num<<endl;
+    freopen("checker.out", "w", stdout);
+    freopen("checker.in", "r", stdin);
+	int len;
+	cin >> len;    
+	put_checker(len, 1);	
+	cout << num << endl;
 	return 0;
 }
