@@ -7,7 +7,6 @@ LANG: C++
 #include <fstream>
 #include <string.h>
 #include <stdlib.h>
-
 using namespace std;
 
 #define CLEAR 57521883
@@ -16,21 +15,16 @@ const long moveTable[10] =
 
 long clocks = 0;
 
-int complete(int trans_clock[], long clock_l)
+bool complete(int trans_clock[], long clock)
 {
 	int i, j;
-	for(i=1; i<=9; i++)
-	{
-		for(j=0; j<trans_clock[i]; j++)
-		{
-			clock_l += moveTable[i];
-			clock_l &= CLEAR;
+	for(i=1; i<=9; i++){
+		for(j=0; j<trans_clock[i]; j++){
+			clock += moveTable[i];
+			clock &= CLEAR;
 		}
 	}
-	if(!clock_l)
-		return 1;
-	else
-		return 0;
+	return !clock;
 }
 
 void try_all(long clock_l, ofstream &fout)
@@ -58,23 +52,18 @@ void try_all(long clock_l, ofstream &fout)
 		trans_clock[7] = t[7];
 		trans_clock[8] = t[8];
 		trans_clock[9] = t[9];
-		if(complete(trans_clock, clock_l))
-		{
-			for(i=1; i<=9; i++)
-			{
-				for(j=0; j<t[i]; j++)
-				{
+		if(complete(trans_clock, clock_l)) {
+			for(i=1; i<=9; i++) {
+				for(j=0; j<t[i]; j++) {
 					result[length++] = i;
 				}
 			}
 			for(i=0; i<length-1; i++)
 				fout <<result[i] <<" ";
 			fout <<result[length-1]<<endl;
-			goto FLAG;
+			return;
 		}
 	}
-FLAG:
-	return;
 }
 	
 int main() 
