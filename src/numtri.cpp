@@ -5,52 +5,34 @@ LANG: C++
 */
 #include <iostream>
 #include <fstream>
-#include <string>
-
+#include <algorithm>
 using namespace std;
 
 int main() {
-    ofstream fout ("numtri.out");
-    ifstream fin ("numtri.in");
-	int line, max=0;
-	int i, j;
+    freopen("numtri.out", "w", stdout);
+    freopen("numtri.in", "r", stdin);
+	int line;
     int a[1001] = {0};
 	int b[1001] = {0};
-	fin>>line;
-	for(i=1; i<=line; i++)
-	{
-		for(j=1; j<=i; j++)
-		{
-			if(i%2)	//odd line
-			{
-				fin>>a[j];
-				a[j]+=(b[j-1]>b[j]?b[j-1]:b[j]);
+	cin>>line;
+	for(int i=1; i<=line; i++) {
+		for(int j=1; j<=i; j++) {
+			if(i%2)	{ //odd line
+				cin>>a[j];
+				a[j] += max(b[j-1], b[j]);
 			}
-			else		//even line
-			{
-				fin>>b[j];
-				b[j]+=(a[j-1]>a[j]?a[j-1]:a[j]);
+			else {		//even line
+				cin>>b[j];
+				b[j] += max(a[j-1], a[j]);
 			}	
 		}
 	}
 
-	if(line%2)	//odd line
-	{
-		for(i=1; i<=line; i++)
-		{
-			if(max<a[i])
-				max = a[i];
-		}
+	if(line%2) { //odd line
+		cout<< *max_element(a+1, a+line+1) << endl;
 	}
-	else		//even line
-	{
-		for(i=1; i<=line; i++)
-		{
-			if(max<b[i])
-				max = b[i];
-		}
+	else {	//even line
+		cout<< *max_element(b+1, b+line+1) << endl;
 	}
-
-	fout << max<<endl;
     return 0;
 }
