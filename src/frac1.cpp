@@ -6,7 +6,6 @@ LANG: C++
 #include <iostream>
 #include <fstream>
 #include <algorithm>
-
 using namespace std;
 
 typedef struct
@@ -41,7 +40,7 @@ int main() {
 	{
 		for(j=i+1; j<=N; j++)
 		{
-			if(find_mcd(j, i)==1)
+			if(find_mcd(j, i)==1) //非最简直接丢掉就行了
 			{
 				output[len].nr = i;
 				output[len++].dr = j;
