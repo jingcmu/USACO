@@ -6,7 +6,6 @@ LANG: C++
 #include <bitset>
 #include <fstream>
 #include <iostream>
-
 using namespace std;
 
 short hamming[64];
